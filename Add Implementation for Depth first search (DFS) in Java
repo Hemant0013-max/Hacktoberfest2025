@@ -1,0 +1,66 @@
+import java.util.ArrayList;
+import java.util.List;
+
+class Graph {
+    private int V;
+    private List<List<Integer>> adj;
+    private List<Integer> traversal;
+
+    public Graph(int v) {
+        V = v;
+        adj = new ArrayList<>(V);
+        for (int i = 0; i < V; ++i) {
+            adj.add(new ArrayList<>());
+        }
+        traversal = new ArrayList<>();
+    }
+
+    public void addEdge(int u, int v) {
+        adj.get(u).add(v);
+    }
+
+    private void dfsUtil(int u, boolean[] visited) {
+        visited[u] = true;
+        traversal.add(u);
+
+        for (int v : adj.get(u)) {
+            if (!visited[v]) {
+                dfsUtil(v, visited);
+            }
+        }
+    }
+
+    public List<Integer> dfs(int startNode) {
+        traversal.clear(); 
+        boolean[] visited = new boolean[V];
+
+        if (startNode >= 0 && startNode < V) {
+            dfsUtil(startNode, visited);
+        }
+        
+        return traversal;
+    }
+}
+
+public class DFSImplementation {
+    public static void main(String[] args) {
+        Graph graph = new Graph(5); 
+
+        graph.addEdge(0, 1);
+        graph.addEdge(0, 2);
+        graph.addEdge(1, 3);
+        graph.addEdge(2, 4);
+        graph.addEdge(3, 4);
+        graph.addEdge(4, 1); 
+        graph.addEdge(4, 0); 
+        graph.addEdge(3, 0);
+
+        List<Integer> traversalOrder = graph.dfs(0); 
+
+        System.out.print("DFS Traversal starting from 0: ");
+        for (int node : traversalOrder) {
+            System.out.print(node + " ");
+        }
+        System.out.println();
+    }
+}
